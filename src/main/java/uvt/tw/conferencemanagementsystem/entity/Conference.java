@@ -67,12 +67,6 @@ public class Conference {
     @Column(name = "website_url")
     private String websiteUrl;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    private Date updatedAt;
-
 
     @OneToMany(mappedBy = "conference")
     private List<Session> sessions;

@@ -49,9 +49,6 @@ public class Session {
     @Column(name = "max_participants")
     private Integer maxParticipants;
 
-    @Column(name = "created_at")
-    private Date createdAt;
-
     @OneToMany(mappedBy = "session")
     private List<Speaker> speakers;
 
