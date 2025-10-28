@@ -1,5 +1,5 @@
 -- Enums
-CREATE TYPE user_role AS ENUM ('attendee', 'organizer', 'admin');
+CREATE TYPE user_role AS ENUM ('ATTENDEE', 'ORGANIZER', 'ADMIN');
 CREATE TYPE conference_status AS ENUM ('draft', 'published', 'ongoing', 'completed', 'cancelled');
 CREATE TYPE registration_status AS ENUM ('pending', 'confirmed', 'cancelled', 'waitlisted');
 CREATE TYPE session_type AS ENUM ('keynote', 'workshop', 'panel', 'presentation', 'breakout');
@@ -10,7 +10,7 @@ CREATE TABLE users (
   email VARCHAR UNIQUE NOT NULL,
   username VARCHAR UNIQUE NOT NULL,
   password_hash VARCHAR NOT NULL,
-  role user_role DEFAULT 'attendee' NOT NULL,
+  role user_role DEFAULT 'ATTENDEE' NOT NULL,
   first_name VARCHAR NOT NULL,
   last_name VARCHAR NOT NULL,
   bio TEXT,
