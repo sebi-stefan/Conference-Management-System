@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import uvt.tw.conferencemanagementsystem.api.dto.user.enums.UserRole;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class User {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     private UserRole role;
 
     @NotNull
