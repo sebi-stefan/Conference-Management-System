@@ -1,0 +1,97 @@
+graph TB
+    subgraph "Client Layer"
+        WEB[React Frontend<br/>Conference Portal]
+    end
+
+    subgraph "Application Layer"
+        AUTH[Authentication & Authorization<br/>Spring Security/JWT<br/>Role-Based Access Control]
+        SPRING[Spring Boot Backend<br/>REST API]
+    end
+
+    subgraph "Business Services"
+        CONF[Conference Service<br/>Create & Manage Conferences<br/>Organizer Role]
+        SESSION[Session Service<br/>Create & Manage Sessions<br/>Organizer Role]
+        ATTENDEE_MGT[Attendee Management<br/>Manage Conference Attendees<br/>Organizer Role]
+        USER[User Service<br/>Profile Management<br/>All Roles]
+        VIEW[Conference Viewer<br/>View Conference Info<br/>Attendee Role]
+        REG[Registration Service<br/>Conference Registration<br/>Attendee Role]
+        STATS[Statistics Service<br/>Analytics & Reports<br/>Admin Role]
+    end
+
+    subgraph "Caching Layer"
+        REDIS[(Redis Cache<br/>Session & Data Cache)]
+    end
+
+    subgraph "Database Layer"
+        POSTGRES[(PostgreSQL<br/>Primary Database)]
+    end
+
+    subgraph "Storage Layer"
+        MINIO[(MinIO<br/>File & Picture Storage)]
+    end
+
+    subgraph "Async Processing"
+        QUEUE[Message Queue<br/>Async Tasks]
+        EMAIL_SERVICE[Email Service<br/>Notification Handler]
+    end
+
+    subgraph "External Services"
+        SMTP[SMTP Server<br/>Email Delivery]
+    end
+
+    WEB --> AUTH
+
+    AUTH --> SPRING
+
+    SPRING --> CONF
+    SPRING --> SESSION
+    SPRING --> ATTENDEE_MGT
+    SPRING --> USER
+    SPRING --> REG
+    SPRING --> VIEW
+    SPRING --> STATS
+
+    CONF --> REDIS
+    SESSION --> REDIS
+    USER --> REDIS
+    REG --> REDIS
+    VIEW --> REDIS
+
+    REDIS -.cache miss.-> POSTGRES
+
+    CONF --> POSTGRES
+    SESSION --> POSTGRES
+    ATTENDEE_MGT --> POSTGRES
+    USER --> POSTGRES
+    REG --> POSTGRES
+    VIEW --> POSTGRES
+    STATS --> POSTGRES
+
+    CONF -->|conference backdrops| MINIO
+    USER -->|profile pictures| MINIO
+
+    REG --> QUEUE
+    CONF --> QUEUE
+    SESSION --> QUEUE
+    ATTENDEE_MGT --> QUEUE
+
+    QUEUE --> EMAIL_SERVICE
+
+    EMAIL_SERVICE --> SMTP
+
+    style WEB fill:#61dafb,color:#000
+    style AUTH fill:#6db33f,color:#fff
+    style SPRING fill:#6db33f,color:#fff
+    style REDIS fill:#dc382d,color:#fff
+    style POSTGRES fill:#336791,color:#fff
+    style MINIO fill:#c72c48,color:#fff
+    style QUEUE fill:#ff6600,color:#fff
+    style EMAIL_SERVICE fill:#ffd700,color:#000
+    style SMTP fill:#0078d4,color:#fff
+    style CONF fill:#e1f5e1,color:#000
+    style SESSION fill:#e1f5e1,color:#000
+    style ATTENDEE_MGT fill:#e1f5e1,color:#000
+    style USER fill:#e8f5e9,color:#000
+    style REG fill:#fff3e0,color:#000
+    style VIEW fill:#fff3e0,color:#000
+    style STATS fill:#e3f2fd,color:#000
