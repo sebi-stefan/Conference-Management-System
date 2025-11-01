@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import uvt.tw.conferencemanagementsystem.app.service.user.UserAlreadyExistsException;
+import uvt.tw.conferencemanagementsystem.app.service.user.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,6 +55,19 @@ public class GlobalExceptionHandler{
         return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    protected ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException ex){
 
+        ApiError apiError = new ApiError(HttpStatus.CONFLICT, ex.getMessage(), List.of());
 
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    protected ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex){
+
+        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), List.of());
+
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
 }
