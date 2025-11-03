@@ -1,7 +1,11 @@
 import styles from "./Register.module.css";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import "../../index.css"
 
 function Register() {
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState({
         email: "",
@@ -65,12 +69,12 @@ function Register() {
     }
 
     return (
-        <div className={styles.registerContainer}>
-            <div className={styles.registerBox}>
-                <h1 className={styles.registerTitle}>Create Account</h1>
-                <form className={styles.registerForm} onSubmit={handleSubmit} noValidate>
+        <div className={"setup-container"}>
+            <div className={"login-register-box"}>
+                <h1 className={"setup-title"}>Create Account</h1>
+                <form className={"login-register-form"} onSubmit={handleSubmit} noValidate autoComplete={'off'}>
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder="First Name"
                         type="text"
                         name="firstName"
@@ -78,10 +82,10 @@ function Register() {
                         onChange={handleOnChange}
                     />
                     {errors.firstName &&
-                        <span className={styles.error}>{errors.firstName}</span>}
+                        <span className={"error"}>{errors.firstName}</span>}
 
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder="Last Name"
                         type="text"
                         name="lastName"
@@ -89,10 +93,10 @@ function Register() {
                         onChange={handleOnChange}
                     />
                     {errors.lastName &&
-                        <span className={styles.error}>{errors.lastName}</span>}
+                        <span className={"error"}>{errors.lastName}</span>}
 
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder="Email"
                         type="email"
                         name="email"
@@ -100,10 +104,10 @@ function Register() {
                         onChange={handleOnChange}
                     />
                     {errors.email &&
-                        <span className={styles.error}>{errors.email}</span>}
+                        <span className={"error"}>{errors.email}</span>}
 
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder="Password"
                         type="password"
                         name="password"
@@ -111,7 +115,7 @@ function Register() {
                         onChange={handleOnChange}
                     />
                     {errors.password &&
-                        <span className={styles.error}>{errors.password}</span>}
+                        <span className={"error"}>{errors.password}</span>}
 
                     <textarea
                         className={styles.textarea}
@@ -122,10 +126,10 @@ function Register() {
                         onChange={handleOnChange}
                     />
                     {errors.bio &&
-                        <span className={styles.error}>{errors.bio}</span>}
+                        <span className={"error"}>{errors.bio}</span>}
 
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder="Organization (optional)"
                         type="text"
                         name="organization"
@@ -133,16 +137,28 @@ function Register() {
                         onChange={handleOnChange}
                     />
                     {errors.organization &&
-                        <span className={styles.error}>{errors.organization}</span>}
+                        <span className={"error"}>{errors.organization}</span>}
 
 
-                    {errors.submit && <span className={styles.error}>{errors.submit}</span>}
+                    {errors.submit && <span className={"error"}>{errors.submit}</span>}
 
-                    <button className={styles.submitButton} type="submit">Register</button>
+                    <button className={"btn"} type="submit">Register</button>
                 </form>
-                <p className={styles.loginPrompt}>
+                <p className={"prompt"}>
                     Already have an account?
-                    <button className={styles.loginButton} type="button">Login</button>
+                    <Link
+                        to={'/login'}
+                        className={"setup-link"}
+                    >Login</Link>
+
+                </p>
+
+                <p className={"prompt"}>
+                    Want to go back?
+                    <Link
+                        to={'/'}
+                        className={"setup-link"}
+                    >Home</Link>
                 </p>
             </div>
         </div>
