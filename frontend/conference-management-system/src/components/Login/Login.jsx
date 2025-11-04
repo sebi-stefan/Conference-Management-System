@@ -1,7 +1,10 @@
 import {useState} from "react";
-import styles from "./Login.module.css";
+import "../../index.css"
+import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
 
     const [credentials, setCredentials] = useState({
         email: "",
@@ -49,37 +52,48 @@ function Login() {
     }
 
     return(
-        <div className={styles.loginContainer}>
-            <div className={styles.loginBox}>
-                <h1 className={styles.loginTitle}>Login</h1>
-                <form className={styles.loginForm} onSubmit={handleSubmit} noValidate>
+        <div className={"setup-container"}>
+            <div className={"login-register-box"}>
+                <h1 className={"setup-title"}>Login</h1>
+                <form className={"login-register-form"} onSubmit={handleSubmit} noValidate autoComplete={'off'}>
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder={"Email"}
                         type={"email"}
                         value={credentials.email}
                         name={"email"}
                         onChange={handleChange}
                     />
-                    {errors.email && <span className={styles.error}>{errors.email}</span>}
+                    {errors.email && <span className={"error"}>{errors.email}</span>}
 
                     <input
-                        className={styles.input}
+                        className={"input"}
                         placeholder={"Password"}
                         type={"password"}
                         value={credentials.password}
                         name={"password"}
                         onChange={handleChange}
                     />
-                    {errors.password && <span className={styles.error}>{errors.password}</span>}
+                    {errors.password && <span className={"error"}>{errors.password}</span>}
 
-                    <button className={styles.submitButton} type="submit">
+                    <button className={"btn"} type="submit">
                         Login
                     </button>
                 </form>
-                <p className={styles.registerPrompt}>
+                <p className={"prompt"}>
                     Don't have an account?
-                    <button className={styles.registerButton}>Register Now</button>
+                    <Link
+                        to={'/register'}
+                        className={"setup-link"}
+                    >Register</Link>
+                </p>
+
+                <p className={"prompt"}>
+                    Want to go back?
+                    <Link
+                        to={'/'}
+                        className={"setup-link"}
+                    >Home</Link>
                 </p>
             </div>
         </div>

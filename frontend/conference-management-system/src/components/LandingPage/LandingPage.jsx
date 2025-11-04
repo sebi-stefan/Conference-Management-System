@@ -1,9 +1,15 @@
 import React from 'react';
 import styles from './LandingPage.module.css';
+import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import "../../index.css";
 
 function LandingPage() {
+
+    const navigate = useNavigate();
+
     return (
-        <div className={styles.landingContainer}>
+        <div className={"setup-container"}>
             <div className={styles.content}>
                 <h1 className={styles.title}>
                     Welcome to ConferenceHub
@@ -12,12 +18,15 @@ function LandingPage() {
                     Host, attend and manage your conferences, all in one place!
                 </p>
                 <div className={styles.buttonContainer}>
-                    <button className={`${styles.btn} ${styles.btnLogin}`}>
-                        Login
-                    </button>
-                    <button className={`${styles.btn} ${styles.btnSignup}`}>
-                        Sign Up
-                    </button>
+                    <Link
+                        to={'/login'}
+                        className={`landing-page-btn ${styles.btnLogin}`}
+                    >Login</Link>
+
+                    <Link
+                        to={'register'}
+                        className={`landing-page-btn ${styles.btnSignup}`}
+                    >Register</Link>
                 </div>
             </div>
         </div>
