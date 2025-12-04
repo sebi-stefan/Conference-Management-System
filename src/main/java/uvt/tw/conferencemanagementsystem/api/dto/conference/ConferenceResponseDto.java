@@ -1,48 +1,46 @@
 package uvt.tw.conferencemanagementsystem.api.dto.conference;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import uvt.tw.conferencemanagementsystem.api.dto.session.SessionResponseDto;
-import uvt.tw.conferencemanagementsystem.api.dto.user.UserResponseDto;
-import uvt.tw.conferencemanagementsystem.api.dto.conference.enums.ConferenceStatus;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import uvt.tw.conferencemanagementsystem.api.dto.conference.enums.ConferenceStatus;
+import uvt.tw.conferencemanagementsystem.api.dto.session.SessionResponseDto;
+import uvt.tw.conferencemanagementsystem.api.dto.user.UserResponseDto;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConferenceResponseDto {
-    @NotNull
-    List<SessionResponseDto> sessions;
 
-    List<TagResponseDto> tags;
+  private Long id;
 
-    @NotNull
-    UserResponseDto organizer;
+  private UserResponseDto organizer;
 
-    @NotNull
-    String title;
+  private String title;
 
-    String description;
+  private String description;
 
-    String venueName;
+  private String venueName;
 
-    String venueAddress;
+  private String venueAddress;
 
-    @NotNull
-    LocalDate startDate;
+  private LocalDate startDate;
 
-    @NotNull
-    LocalDate endDate;
+  private LocalDate endDate;
 
-    Integer maxAttendees;
+  private Integer maxAttendees;
 
-    LocalDate registrationDeadline;
+  private LocalDate registrationDeadline;
 
-    ConferenceStatus status;
+  private ConferenceStatus status;
 
-    String coverImageUrl;
+  private String websiteUrl;
 
-    String websiteUrl;
+  private String coverImageUrl;
+
+  private List<SessionResponseDto> sessions;
 }

@@ -1,25 +1,23 @@
 package uvt.tw.conferencemanagementsystem.api.dto.user;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import uvt.tw.conferencemanagementsystem.api.dto.user.enums.UserRole;
 
 @Data
 @Builder
 public class UserResponseDto {
 
-    @NotNull
-    String email;
+  private Long id;
 
-    @NotNull
-    String firstName;
+  private String email;
 
-    @NotNull
-    String lastName;
+  private String firstName;
 
-    String bio;
+  private String lastName;
 
-    String organization;
+  private String bio;
 
+  private String organization;
+
+  private String profilePictureUrl;
 }

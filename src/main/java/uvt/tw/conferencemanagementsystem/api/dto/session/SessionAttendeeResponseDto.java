@@ -1,22 +1,21 @@
 package uvt.tw.conferencemanagementsystem.api.dto.session;
 
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 @Builder
 public class SessionAttendeeResponseDto {
 
-    @NotNull
-    Long sessionId;
+  @NotNull
+  Long sessionId;
 
-    @NotNull
-    Long userId;
+  @NotNull
+  Long userId;
 
-    LocalDate registeredAt;
+  LocalDate registeredAt;
 
-    Boolean attended;
+  Boolean attended;
 }

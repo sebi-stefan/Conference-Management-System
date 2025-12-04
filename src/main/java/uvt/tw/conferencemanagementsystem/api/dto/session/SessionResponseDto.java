@@ -1,40 +1,22 @@
 package uvt.tw.conferencemanagementsystem.api.dto.session;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
-import uvt.tw.conferencemanagementsystem.api.dto.conference.SpeakerResponseDto;
-import uvt.tw.conferencemanagementsystem.api.dto.session.enums.SessionType;
-
 import java.time.LocalDate;
 import java.util.List;
+import lombok.Builder;
+import lombok.Data;
+import uvt.tw.conferencemanagementsystem.api.dto.session.enums.SessionType;
+import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
 
 @Data
 @Builder
 public class SessionResponseDto {
-    @NotNull
-    Long conferenceId;
-
-    @NotNull
-    String title;
-
-    String description;
-
-    SessionType sessionType;
-
-    String room;
-
-    @NotNull
-    LocalDate startTime;
-
-    @NotNull
-    LocalDate endTime;
-
-    Integer maxParticipants;
-
-    List<SessionAttendeeResponseDto> sessionAttendees;
-
-    List<SpeakerResponseDto> speakers;
-
+  private Long id;
+  private String title;
+  private String description;
+  private SessionType sessionType;
+  private String room;
+  private LocalDate startTime;
+  private LocalDate endTime;
+  private Integer maxParticipants;
+  private List<UserEntity> speakers;
 }
-

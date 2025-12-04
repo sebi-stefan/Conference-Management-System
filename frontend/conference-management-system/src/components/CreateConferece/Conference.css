@@ -1,0 +1,74 @@
+.create-conf-box
+{
+    background: #d6dff3;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    min-height: 70%;
+    max-width: 650px;
+    text-align: center;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+}
+
+.create-conference-form
+{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 80%;
+}
+
+.pair {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.create-session-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    height: 80%;
+}
+
+.create-session-box {
+    background: #e7eae9;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    /*width: 100%;*/
+    /*min-height: 70%;*/
+    max-width: 650px;
+    text-align: center;
+}
+
+.btns-session {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.session-error {
+    color: #c00;
+    padding: 2px;
+    animation: pulse 1s ease-in-out;
+}
+
+.session-error.shake {
+    animation: pulse 0.5s ease-in-out, shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+
+
+
+
