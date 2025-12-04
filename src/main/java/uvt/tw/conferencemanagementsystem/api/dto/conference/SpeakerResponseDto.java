@@ -7,11 +7,11 @@ import lombok.Data;
 @Data
 @Builder
 public class SpeakerResponseDto {
-    @NotNull
-    Long sessionId;
+  @NotNull
+  Long sessionId;
 
-    @NotNull
-    Long userId;
+  @NotNull
+  Long userId;
 
-    Integer speakerOrder;
+  Integer speakerOrder;
 }

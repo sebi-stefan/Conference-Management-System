@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ConferenceManagementSystemApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(ConferenceManagementSystemApplication.class, args);
-    }
-
+  public static void main(String[] args) {
+    SpringApplication.run(ConferenceManagementSystemApplication.class, args);
+  }
 }

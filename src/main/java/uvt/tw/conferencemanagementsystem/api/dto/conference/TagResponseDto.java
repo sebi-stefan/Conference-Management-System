@@ -1,6 +1,5 @@
 package uvt.tw.conferencemanagementsystem.api.dto.conference;
 
-
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +8,6 @@ import lombok.Data;
 @Builder
 public class TagResponseDto {
 
-    @NotNull
-    String name;
+  @NotNull
+  String name;
 }

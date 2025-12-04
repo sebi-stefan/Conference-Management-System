@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'uvt.tw'
@@ -11,6 +12,13 @@ description = 'Conference-Management-System'
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+spotless {
+    java {
+        eclipse('4.26')
+        indentWithSpaces(2)
     }
 }
 
@@ -42,3 +50,5 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+compileJava.dependsOn 'spotlessApply'
