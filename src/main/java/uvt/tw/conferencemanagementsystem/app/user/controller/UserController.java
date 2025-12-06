@@ -45,6 +45,12 @@ public class UserController implements UserApi {
   }
 
   @Override
+  public ResponseEntity<UserResponseDto> getUserById(Long userId) {
+    log.info("Received request for getUserById with id: {}", userId);
+    return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(userId));
+  }
+
+  @Override
   public ResponseEntity<CurrentUserResponseDto> getCurrentUser() {
     log.info("Received request for getCurrentUser");
 

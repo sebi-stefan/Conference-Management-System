@@ -1,0 +1,211 @@
+{
+	"info": {
+		"_postman_id": "43c38b53-d039-4063-990d-f32e47484593",
+		"name": "TW_CMS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40455448"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"userexample.com\",\n  \"password\": \"str\",\n  \"firstName\": \"\",\n  \"lastName\": \"string\",\n  \"bio\": \"string\",\n  \"organization\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"firstName\": \"\",\n  \"lastName\": \"string\",\n  \"bio\": \"string\",\n  \"organization\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/user/1",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get current user",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "cmspass",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "organizer@cms.com",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/user/current",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"user",
+								"current"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user by id",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Conference",
+			"item": [
+				{
+					"name": "Create conference",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "organizer@cms.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "cmspass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"venueName\": \"string\",\n  \"venueAddress\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"startDate\": \"2025-12-06\",\n  \"endDate\": \"2025-12-07\",\n  \"maxAttendees\": 0,\n  \"registrationDeadline\": \"2025-12-08\",\n  \"websiteUrl\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/conference",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"conference"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update conference",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "organizer@cms.com",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "cmspass",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"string\",\n  \"description\": \"string\",\n  \"venueName\": \"string\",\n  \"venueAddress\": \"string\",\n  \"city\": \"string\",\n  \"country\": \"string\",\n  \"startDate\": \"2025-12-06\",\n  \"endDate\": \"2025-12-07\",\n  \"maxAttendees\": 0,\n  \"registrationDeadline\": \"2025-12-08\",\n  \"websiteUrl\": \"string\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/conference",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"conference"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

@@ -12,6 +12,7 @@ import uvt.tw.conferencemanagementsystem.api.dto.user.CurrentUserResponseDto;
 import uvt.tw.conferencemanagementsystem.api.dto.user.UpdateUserDataRequestDto;
 import uvt.tw.conferencemanagementsystem.api.dto.user.UserResponseDto;
 import uvt.tw.conferencemanagementsystem.api.dto.user.enums.UserRole;
+import uvt.tw.conferencemanagementsystem.api.exception.OwnershipException;
 import uvt.tw.conferencemanagementsystem.api.exception.UserAlreadyExistsException;
 import uvt.tw.conferencemanagementsystem.api.exception.UserNotFoundException;
 import uvt.tw.conferencemanagementsystem.app.security.CustomUserDetails;
@@ -50,6 +51,7 @@ public class UserService {
         userRepository
             .findById(id)
             .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+    validateUserOwnership(user);
 
     updateUserData(user, updatedUserData);
 
@@ -59,16 +61,7 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public CurrentUserResponseDto getCurrentUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    if (authentication == null || !authentication.isAuthenticated()) {
-      return null;
-    }
-    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-    UserEntity user =
-        userRepository
-            .findById(customUserDetails.getId())
-            .orElseThrow(() -> new UserNotFoundException("User not found"));
-    return UserConverter.convertToCurrentUserResponseDto(user);
+    return UserConverter.convertToCurrentUserResponseDto(getCurrentUserEntity());
   }
 
   @Transactional(readOnly = true)
@@ -104,6 +97,24 @@ public class UserService {
             .orElseThrow(
                 () -> new UserNotFoundException("User not found based on the specified email"));
     return UserConverter.convertToReponseDto(userEntity);
+  }
+
+  public UserEntity getCurrentUserEntity() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication == null || !authentication.isAuthenticated()) {
+      return null;
+    }
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    return userRepository
+        .findById(customUserDetails.getId())
+        .orElseThrow(() -> new UserNotFoundException("User not found"));
+  }
+
+  private void validateUserOwnership(UserEntity user) {
+    UserEntity currentUser = getCurrentUserEntity();
+    if (!(currentUser.getId().equals(user.getId()) || UserRole.ADMIN.equals(currentUser.getRole())))
+      throw new OwnershipException();
   }
 
   private void updateUserData(UserEntity user, UpdateUserDataRequestDto requestDto) {

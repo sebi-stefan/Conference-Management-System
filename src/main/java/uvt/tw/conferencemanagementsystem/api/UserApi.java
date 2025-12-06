@@ -26,6 +26,9 @@ public interface UserApi {
   @GetMapping
   ResponseEntity<List<UserResponseDto>> getAllUsers();
 
+  @GetMapping("/{userId}")
+  ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId);
+
   @GetMapping("/current")
   ResponseEntity<CurrentUserResponseDto> getCurrentUser();
 
