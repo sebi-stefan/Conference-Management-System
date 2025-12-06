@@ -20,7 +20,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     UserEntity userEntity = userRepository.findByEmail(username).orElseThrow();
 
-    return CustomUserDetails.builder().id(userEntity.getId()).username(userEntity.getEmail())
-        .password(userEntity.getPasswordHash()).roles(List.of(userEntity.getRole().toString())).build();
+    return CustomUserDetails.builder()
+        .id(userEntity.getId())
+        .username(userEntity.getEmail())
+        .password(userEntity.getPasswordHash())
+        .roles(List.of(userEntity.getRole().toString()))
+        .build();
   }
 }

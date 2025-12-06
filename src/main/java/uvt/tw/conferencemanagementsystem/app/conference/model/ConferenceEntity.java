@@ -11,9 +11,13 @@ import uvt.tw.conferencemanagementsystem.app.session.model.SessionEntity;
 import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
 
 @Entity
-@Table(name = "conferences", indexes = {@Index(name = "idx_conferences_organizer_id", columnList = "organizer_id"),
-    @Index(name = "idx_conferences_status", columnList = "status"),
-    @Index(name = "idx_conferences_dates", columnList = "start_date, end_date")})
+@Table(
+    name = "conferences",
+    indexes = {
+      @Index(name = "idx_conferences_organizer_id", columnList = "organizer_id"),
+      @Index(name = "idx_conferences_status", columnList = "status"),
+      @Index(name = "idx_conferences_dates", columnList = "start_date, end_date")
+    })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,7 +28,10 @@ public class ConferenceEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "organizer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_conferences_organizer"))
+  @JoinColumn(
+      name = "organizer_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "fk_conferences_organizer"))
   private UserEntity organizer;
 
   @Column(nullable = false)

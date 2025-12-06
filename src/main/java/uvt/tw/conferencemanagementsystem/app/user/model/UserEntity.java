@@ -13,7 +13,9 @@ import uvt.tw.conferencemanagementsystem.app.session.model.SessionAttendeeEntity
 import uvt.tw.conferencemanagementsystem.app.session.model.SessionEntity;
 
 @Entity
-@Table(name = "users", indexes = {@Index(name = "idx_users_email", columnList = "email")})
+@Table(
+    name = "users",
+    indexes = {@Index(name = "idx_users_email", columnList = "email")})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

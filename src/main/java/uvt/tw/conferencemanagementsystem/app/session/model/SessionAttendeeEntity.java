@@ -8,10 +8,17 @@ import lombok.NoArgsConstructor;
 import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
 
 @Entity
-@Table(name = "session_attendees", uniqueConstraints = {
-    @UniqueConstraint(name = "uq_session_attendees_session_user", columnNames = {"session_id",
-        "user_id"})}, indexes = {@Index(name = "idx_session_attendees_session_id", columnList = "session_id"),
-            @Index(name = "idx_session_attendees_user_id", columnList = "user_id")})
+@Table(
+    name = "session_attendees",
+    uniqueConstraints = {
+      @UniqueConstraint(
+          name = "uq_session_attendees_session_user",
+          columnNames = {"session_id", "user_id"})
+    },
+    indexes = {
+      @Index(name = "idx_session_attendees_session_id", columnList = "session_id"),
+      @Index(name = "idx_session_attendees_user_id", columnList = "user_id")
+    })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,11 +29,17 @@ public class SessionAttendeeEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "session_id", nullable = false, foreignKey = @ForeignKey(name = "fk_session_attendees_session"))
+  @JoinColumn(
+      name = "session_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "fk_session_attendees_session"))
   private SessionEntity session;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_session_attendees_user"))
+  @JoinColumn(
+      name = "user_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "fk_session_attendees_user"))
   private UserEntity user;
 
   @Column(name = "registered_at")

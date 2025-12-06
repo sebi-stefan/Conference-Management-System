@@ -11,8 +11,12 @@ import uvt.tw.conferencemanagementsystem.app.conference.model.ConferenceEntity;
 import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
 
 @Entity
-@Table(name = "sessions", indexes = {@Index(name = "idx_sessions_conference_id", columnList = "conference_id"),
-    @Index(name = "idx_sessions_time", columnList = "start_time, end_time")})
+@Table(
+    name = "sessions",
+    indexes = {
+      @Index(name = "idx_sessions_conference_id", columnList = "conference_id"),
+      @Index(name = "idx_sessions_time", columnList = "start_time, end_time")
+    })
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,7 +27,10 @@ public class SessionEntity {
   private Long id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "conference_id", nullable = false, foreignKey = @ForeignKey(name = "fk_sessions_conference"))
+  @JoinColumn(
+      name = "conference_id",
+      nullable = false,
+      foreignKey = @ForeignKey(name = "fk_sessions_conference"))
   private ConferenceEntity conference;
 
   @Column(nullable = false)
@@ -50,6 +57,13 @@ public class SessionEntity {
   private Set<SessionAttendeeEntity> sessionAttendees = new HashSet<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(name = "speaker", joinColumns = @JoinColumn(name = "session_id", foreignKey = @ForeignKey(name = "speaker_session_id_fkey")), inverseJoinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "speaker_user_id_fkey")))
+  @JoinTable(
+      name = "speaker",
+      joinColumns =
+          @JoinColumn(
+              name = "session_id",
+              foreignKey = @ForeignKey(name = "speaker_session_id_fkey")),
+      inverseJoinColumns =
+          @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "speaker_user_id_fkey")))
   private Set<UserEntity> speakers = new HashSet<>();
 }
