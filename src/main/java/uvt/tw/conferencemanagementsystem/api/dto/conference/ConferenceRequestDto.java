@@ -12,25 +12,31 @@ public class ConferenceRequestDto {
 
   @Size(max = 255)
   @NotNull
-  String title;
+  private String title;
 
   @Size(max = 255)
-  String description;
+  private String description;
 
   @Size(max = 255)
-  String venueName;
+  private String venueName;
 
   @Size(max = 255)
-  String venueAddress;
+  private String venueAddress;
 
-  @NotNull LocalDate startDate;
+  @Size(max = 20)
+  private String city;
 
-  @NotNull LocalDate endDate;
+  @Size(max = 20)
+  private String country;
 
-  Integer maxAttendees;
+  @NotNull private LocalDate startDate;
 
-  LocalDate registrationDeadline;
+  @NotNull private LocalDate endDate;
 
-  @Size(max = 255)
-  String websiteUrl;
+  private Integer maxAttendees;
+
+  @NotNull private LocalDate registrationDeadline;
+
+  @Size(max = 50)
+  private String websiteUrl;
 }

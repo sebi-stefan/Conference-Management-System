@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uvt.tw.conferencemanagementsystem.api.dto.conference.enums.ConferenceStatus;
 import uvt.tw.conferencemanagementsystem.app.session.model.SessionEntity;
 import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
 
@@ -63,13 +64,14 @@ public class ConferenceEntity {
   private LocalDate registrationDeadline;
 
   @Column(length = 50)
-  private String status = "DRAFT";
-
-  @Column(name = "cover_image_url")
-  private String coverImageUrl;
+  @Enumerated(EnumType.STRING)
+  private ConferenceStatus status = ConferenceStatus.DRAFT;
 
   @Column(name = "website_url")
   private String websiteUrl;
+
+  @Column(name = "cover_image_url")
+  private String coverImageUrl;
 
   @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Set<SessionEntity> sessions = new HashSet<>();

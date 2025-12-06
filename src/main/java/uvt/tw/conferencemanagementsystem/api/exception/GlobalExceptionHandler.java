@@ -1,6 +1,7 @@
 package uvt.tw.conferencemanagementsystem.api.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,6 +107,27 @@ public class GlobalExceptionHandler {
 
     ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), List.of());
 
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
+  @ExceptionHandler(DateTimeException.class)
+  protected ResponseEntity<Object> handleDateTimeException(DateTimeException ex) {
+    ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), List.of());
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
+  @ExceptionHandler(ConferenceNotFoundException.class)
+  protected ResponseEntity<Object> handleConferenceNotFoundException(
+      ConferenceNotFoundException ex) {
+
+    ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), List.of());
+
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
+  @ExceptionHandler(OwnershipException.class)
+  protected ResponseEntity<Object> handleOwnershipException(OwnershipException ex) {
+    ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, ex.getMessage(), List.of());
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 }

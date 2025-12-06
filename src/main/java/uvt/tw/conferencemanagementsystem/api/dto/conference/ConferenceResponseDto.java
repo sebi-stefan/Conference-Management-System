@@ -1,13 +1,11 @@
 package uvt.tw.conferencemanagementsystem.api.dto.conference;
 
 import java.time.LocalDate;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uvt.tw.conferencemanagementsystem.api.dto.conference.enums.ConferenceStatus;
-import uvt.tw.conferencemanagementsystem.api.dto.session.SessionResponseDto;
 import uvt.tw.conferencemanagementsystem.api.dto.user.UserResponseDto;
 
 @Data
@@ -41,6 +39,4 @@ public class ConferenceResponseDto {
   private String websiteUrl;
 
   private String coverImageUrl;
-
-  private List<SessionResponseDto> sessions;
 }
