@@ -23,11 +23,9 @@ public class ConferenceRequestDto {
   @Size(max = 255)
   String venueAddress;
 
-  @NotNull
-  LocalDate startDate;
+  @NotNull LocalDate startDate;
 
-  @NotNull
-  LocalDate endDate;
+  @NotNull LocalDate endDate;
 
   Integer maxAttendees;
 

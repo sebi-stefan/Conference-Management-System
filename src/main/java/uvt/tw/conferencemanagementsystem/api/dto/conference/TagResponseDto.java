@@ -8,6 +8,5 @@ import lombok.Data;
 @Builder
 public class TagResponseDto {
 
-  @NotNull
-  String name;
+  @NotNull String name;
 }

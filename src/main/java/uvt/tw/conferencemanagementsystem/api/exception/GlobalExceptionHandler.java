@@ -1,4 +1,4 @@
-package uvt.tw.conferencemanagementsystem.app.exception;
+package uvt.tw.conferencemanagementsystem.api.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import java.time.LocalDateTime;
@@ -42,10 +42,13 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+  protected ResponseEntity<Object> handleMethodArgumentNotValid(
+      MethodArgumentNotValidException ex) {
 
-    List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-        .map(error -> error.getField() + ": " + error.getDefaultMessage()).toList();
+    List<String> errors =
+        ex.getBindingResult().getFieldErrors().stream()
+            .map(error -> error.getField() + ": " + error.getDefaultMessage())
+            .toList();
 
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Validation error", errors);
 
@@ -53,7 +56,8 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(HttpMessageNotReadableException.class)
-  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+  protected ResponseEntity<Object> handleHttpMessageNotReadable(
+      HttpMessageNotReadableException ex) {
 
     List<String> errors = new ArrayList<>();
 
@@ -65,11 +69,18 @@ public class GlobalExceptionHandler {
         Object invalidValue = ife.getValue();
         Class<?> enumClass = ife.getTargetType();
 
-        String allowedValues = Arrays.stream(enumClass.getEnumConstants()).map(Object::toString)
-            .collect(Collectors.joining(", "));
+        String allowedValues =
+            Arrays.stream(enumClass.getEnumConstants())
+                .map(Object::toString)
+                .collect(Collectors.joining(", "));
 
-        errors.add(fieldName + ": Invalid value '" + invalidValue + "'. Allowed values are: [" + allowedValues
-            + "]");
+        errors.add(
+            fieldName
+                + ": Invalid value '"
+                + invalidValue
+                + "'. Allowed values are: ["
+                + allowedValues
+                + "]");
       } else {
         errors.add("Invalid format for field: " + ife.getPath().get(0).getFieldName());
       }

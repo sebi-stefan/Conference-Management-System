@@ -1,4 +1,4 @@
-package uvt.tw.conferencemanagementsystem.api.conference;
+package uvt.tw.conferencemanagementsystem.api;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -13,7 +13,7 @@ import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceResponseDt
 @RestController
 @RequestMapping("/conference")
 @Tag(name = "Conference")
-public interface ConferenceController {
+public interface ConferenceApi {
 
   @PostMapping
   ResponseEntity<ConferenceResponseDto> createConference(

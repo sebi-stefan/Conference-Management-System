@@ -17,8 +17,12 @@ java {
 
 spotless {
     java {
-        eclipse('4.26')
-        indentWithSpaces(2)
+
+        googleJavaFormat('1.17.0')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        importOrder()
     }
 }
 

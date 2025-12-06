@@ -9,11 +9,9 @@ import uvt.tw.conferencemanagementsystem.api.dto.conference.enums.RegistrationSt
 @Data
 @Builder
 public class RegistrationResponseDto {
-  @NotNull
-  Long conferenceId;
+  @NotNull Long conferenceId;
 
-  @NotNull
-  Long userId;
+  @NotNull Long userId;
 
   RegistrationStatus status;
 
