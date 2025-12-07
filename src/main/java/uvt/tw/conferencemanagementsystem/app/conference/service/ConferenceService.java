@@ -10,11 +10,13 @@ import uvt.tw.conferencemanagementsystem.api.dto.conference.enums.ConferenceStat
 import uvt.tw.conferencemanagementsystem.api.dto.user.enums.UserRole;
 import uvt.tw.conferencemanagementsystem.api.exception.ConferenceNotFoundException;
 import uvt.tw.conferencemanagementsystem.api.exception.OwnershipException;
+import uvt.tw.conferencemanagementsystem.api.exception.UserNotFoundException;
 import uvt.tw.conferencemanagementsystem.app.conference.model.ConferenceEntity;
 import uvt.tw.conferencemanagementsystem.app.conference.repository.ConferenceRepository;
 import uvt.tw.conferencemanagementsystem.app.conference.util.ConferenceConverter;
 import uvt.tw.conferencemanagementsystem.app.conference.util.ConferenceValidator;
 import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
+import uvt.tw.conferencemanagementsystem.app.user.repository.UserRepository;
 import uvt.tw.conferencemanagementsystem.app.user.service.UserService;
 
 @Service
@@ -23,6 +25,7 @@ public class ConferenceService {
 
   private final ConferenceRepository conferenceRepository;
   private final UserService userService;
+  private final UserRepository userRepository;
 
   @Transactional
   public ConferenceResponseDto createConference(ConferenceRequestDto requestDto) {
@@ -65,6 +68,8 @@ public class ConferenceService {
   }
 
   public List<ConferenceResponseDto> getConferencesByUserId(Long userId) {
+    if (!userRepository.existsById(userId))
+      throw new UserNotFoundException(String.format("User with id: %d does not exist", userId));
     List<ConferenceEntity> conferences =
         conferenceRepository.getConferenceEntitiesByOrganizerId(userId);
     return conferences.stream().map(ConferenceConverter::convertToResponseDto).toList();
