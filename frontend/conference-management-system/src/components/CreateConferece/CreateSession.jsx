@@ -25,7 +25,7 @@ function CreateSession({
     description: "",
   });
 
-  const [error, setError] = useState(0);
+  const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
   const [edited, setEdited] = useState(false);
 
@@ -43,23 +43,25 @@ function CreateSession({
       description: "",
     });
     setIsSessionOpen(false);
-    setError(0);
+    setError("");
     setEditingIndex(null);
     setEdited(false);
   }
 
-  // if (
-  //   Number(sessionData.startDate.slice(-2)) >
-  //   Number(sessionData.endDate.slice(-2))
-  // )
-  //   setError("The dates should be in chronological order!");
-  //
-  // if (Object.values(sessionData).includes(""))
-  //   setError("Please input all the fields!");
-  // return error === null;
-
   function validateSessionForm() {
-    return Object.values(sessionData).includes("");
+    if (Object.values(sessionData).includes("")) {
+      setError("Please complete all the fields!");
+      return 0;
+    }
+
+    const startDate = new Date(sessionData.startDate);
+    const endDate = new Date(sessionData.endDate);
+
+    if (startDate > endDate) {
+      setError("The start date should be before the end date!");
+      return 0;
+    }
+    return 1;
   }
 
   function handleChange(e) {
@@ -76,13 +78,9 @@ function CreateSession({
   }
 
   function handleSaveSession() {
-    if (validateSessionForm()) {
-      if (error) {
-        setShake(true);
-        setTimeout(() => setShake(false), 500);
-      } else {
-        setError(1);
-      }
+    if (validateSessionForm() === 0) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
       return;
     }
 
@@ -109,10 +107,8 @@ function CreateSession({
 
   return (
     <div className={"create-session-box"}>
-      {error !== 0 && (
-        <p className={`session-error ${shake ? "shake" : ""}`}>
-          Please input all the fields!
-        </p>
+      {error !== "" && (
+        <p className={`session-error ${shake ? "shake" : ""}`}>{error}</p>
       )}
       <h1>
         {editingIndex === null

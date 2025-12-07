@@ -1,0 +1,36 @@
+.index-page {
+    min-height: 100vh;
+    background-color: hsl(210 40% 96%);
+}
+
+.index-page__placeholder {
+    padding: 2.5rem 2rem;
+    max-width: 80rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.index-page__placeholder-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: hsl(210 50% 20%);
+    margin: 0;
+}
+
+.index-page__placeholder-text {
+    color: hsl(210 20% 45%);
+    margin: 0.5rem 0 0 0;
+}
+
+/* Dark mode */
+:root.dark .index-page {
+    background-color: hsl(210 55% 8%);
+}
+
+:root.dark .index-page__placeholder-title {
+    color: hsl(210 40% 98%);
+}
+
+:root.dark .index-page__placeholder-text {
+    color: hsl(210 20% 65%);
+}
