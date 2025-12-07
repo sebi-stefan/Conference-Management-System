@@ -97,7 +97,7 @@ public class ConferenceService {
     conferenceRepository.deleteById(conference.getId());
   }
 
-  private void validateConferenceOwnership(ConferenceEntity conference) {
+  public void validateConferenceOwnership(ConferenceEntity conference) {
     UserEntity currentUser = userService.getCurrentUserEntity();
     if (!(currentUser.getId().equals(conference.getOrganizer().getId())
         || UserRole.ADMIN.equals(currentUser.getRole()))) {

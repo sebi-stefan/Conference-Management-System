@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uvt.tw.conferencemanagementsystem.api.dto.session.enums.SessionType;
 import uvt.tw.conferencemanagementsystem.app.conference.model.ConferenceEntity;
 import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
 
@@ -39,8 +40,9 @@ public class SessionEntity {
   @Column(columnDefinition = "TEXT")
   private String description;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "session_type", length = 50)
-  private String sessionType;
+  private SessionType sessionType;
 
   private String room;
 
