@@ -1,20 +1,9 @@
 import CreateConference from "./CreateConference";
 import CreateSession from "./CreateSession";
 import { useState } from "react";
+import "./Conference.css";
 
-const styles = {
-  display: "flex",
-  flexDirection: "row",
-  gap: "40px",
-  alignItems: "center",
-  justifyContent: "center",
-  height: "95vh",
-};
-
-// the user cant add a session until he completed the conference details
-// session date, startTime, endTime chronological and session date to be inside startDate endDate interval of conference
-
-function Conference() {
+function Conference({ conferenceData }) {
   const [isSessionOpen, setIsSessionOpen] = useState(false);
   const [sessions, setSessions] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
@@ -29,7 +18,7 @@ function Conference() {
   });
 
   return (
-    <div style={{ ...styles }}>
+    <div className="conference-container">
       <CreateConference
         isSessionOpen={isSessionOpen}
         setIsSessionOpen={setIsSessionOpen}
@@ -37,6 +26,7 @@ function Conference() {
         setSessions={setSessions}
         setOpenSessionData={setOpenSessionData}
         setEditingIndex={setEditingIndex}
+        conferenceData={conferenceData}
       />
       <CreateSession
         isSessionOpen={isSessionOpen}

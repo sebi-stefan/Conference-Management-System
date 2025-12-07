@@ -1,3 +1,13 @@
+.conference-container {
+    display: flex;
+    flex-direction: row;
+    gap: 40px;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: auto;
+}
+
 .create-conf-box
 {
     background: #d6dff3;
@@ -20,10 +30,25 @@
     height: 80%;
 }
 
+.btn-save-new-conference {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    flex: 1;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+    background: linear-gradient(135deg, hsl(22 100% 62%) 0%, hsl(22 100% 55%) 100%);
+    color: hsl(0 0% 100%);
+}
+
 .pair {
     display: flex;
     flex-direction: row;
     gap: 10px;
+    padding-bottom: 0.5rem;
 }
 
 .create-session-form {
@@ -56,6 +81,7 @@
     color: #c00;
     padding: 2px;
     animation: pulse 1s ease-in-out;
+    height: 30px;
 }
 
 .session-error.shake {
