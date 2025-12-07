@@ -24,7 +24,6 @@ public class SessionService {
   private final SessionRepository sessionRepository;
   private final ConferenceRepository conferenceRepository;
   private final ConferenceService conferenceService;
-  private final UserService userService;
 
   @Transactional
   public SessionResponseDto createSession(SessionRequestDto sessionRequestDto, Long conferenceId) {
@@ -65,6 +64,9 @@ public class SessionService {
   }
 
   public List<SessionResponseDto> getSessionsByConferenceId(Long conferenceId) {
+    if (!conferenceRepository.existsById(conferenceId))
+      throw new ConferenceNotFoundException(
+          String.format("Conference with id: %d does not exist!", conferenceId));
     List<SessionEntity> sessions = sessionRepository.getSessionEntitiesByConferenceId(conferenceId);
     return sessions.stream().map(SessionConverter::convertToResponseDto).toList();
   }

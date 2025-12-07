@@ -51,10 +51,10 @@ public class ConferenceController implements ConferenceApi {
   }
 
   @Override
-  public ResponseEntity<List<ConferenceResponseDto>> getConferencesByUserId(Long conferenceId) {
-    log.info("Received request for getConferencesByUserId with id: {}", conferenceId);
+  public ResponseEntity<List<ConferenceResponseDto>> getConferencesByUserId(Long userId) {
+    log.info("Received request for getConferencesByUserId with id: {}", userId);
     return ResponseEntity.status(HttpStatus.OK)
-        .body(conferenceService.getConferencesByUserId(conferenceId));
+        .body(conferenceService.getConferencesByUserId(userId));
   }
 
   @Override
