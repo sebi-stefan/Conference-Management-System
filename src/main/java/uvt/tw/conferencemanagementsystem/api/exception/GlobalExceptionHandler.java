@@ -130,4 +130,12 @@ public class GlobalExceptionHandler {
     ApiError apiError = new ApiError(HttpStatus.FORBIDDEN, ex.getMessage(), List.of());
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
+
+  @ExceptionHandler(SessionNotFoundException.class)
+  protected ResponseEntity<Object> handleSessionNotFoundException(SessionNotFoundException ex) {
+
+    ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getMessage(), List.of());
+
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
 }

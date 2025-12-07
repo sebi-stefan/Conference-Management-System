@@ -9,11 +9,9 @@ import lombok.Data;
 @Builder
 public class SessionAttendeeResponseDto {
 
-  @NotNull
-  Long sessionId;
+  @NotNull Long sessionId;
 
-  @NotNull
-  Long userId;
+  @NotNull Long userId;
 
   LocalDate registeredAt;
 

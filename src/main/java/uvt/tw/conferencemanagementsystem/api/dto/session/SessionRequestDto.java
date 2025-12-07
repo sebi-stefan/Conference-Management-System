@@ -2,7 +2,7 @@ package uvt.tw.conferencemanagementsystem.api.dto.session;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 import uvt.tw.conferencemanagementsystem.api.dto.session.enums.SessionType;
@@ -22,11 +22,9 @@ public class SessionRequestDto {
   @Size(max = 255)
   String room;
 
-  @NotNull
-  LocalDate startTime;
+  @NotNull LocalDateTime startTime;
 
-  @NotNull
-  LocalDate endTime;
+  @NotNull LocalDateTime endTime;
 
-  Integer maxParticipants;
+  @NotNull Integer maxParticipants;
 }
