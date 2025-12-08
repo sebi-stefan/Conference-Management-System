@@ -32,7 +32,7 @@ ConferenceHub se dorește să fie o platformă digitală care să faciliteze pro
 
 2. **Pornirea aplicației**
 ```bash
-    docker compose up 
+    docker compose up --build -d
 ```
 
 3. **Accesarea aplicației**

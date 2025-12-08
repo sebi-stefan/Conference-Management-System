@@ -40,7 +40,7 @@ const Discover = ({
         searchQuery === "" ||
         conf.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         conf.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        conf.locationName.toLowerCase().includes(searchQuery.toLowerCase());
+        conf.venueName.toLowerCase().includes(searchQuery.toLowerCase());
 
       const confTags = conf.tags.split(",").map((t) => t.trim());
       const matchesTags =
