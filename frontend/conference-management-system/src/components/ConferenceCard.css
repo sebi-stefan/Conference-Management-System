@@ -16,7 +16,6 @@
     transform: translateY(-0.25rem);
 }
 
-/* Tags */
 .conference-card__tags {
     display: flex;
     flex-wrap: wrap;
@@ -32,7 +31,6 @@
     color: hsl(22 100% 62%);
 }
 
-/* Title */
 .conference-card__title {
     font-size: 1.25rem;
     font-weight: 600;
@@ -41,7 +39,6 @@
     margin: 0;
 }
 
-/* Description */
 .conference-card__description {
     font-size: 0.875rem;
     color: hsl(210 20% 45%);
@@ -53,7 +50,6 @@
     margin: 0;
 }
 
-/* Info */
 .conference-card__info {
     display: flex;
     flex-direction: column;
@@ -85,7 +81,6 @@
     text-overflow: ellipsis;
 }
 
-/* Actions */
 .conference-card__actions {
     display: flex;
     gap: 0.75rem;

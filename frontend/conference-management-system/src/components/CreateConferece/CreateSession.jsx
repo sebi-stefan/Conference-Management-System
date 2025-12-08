@@ -1,6 +1,6 @@
 import "./Conference.css";
 import TextField from "@mui/material/TextField";
-import { addIcon } from "../../utils/getIcons";
+import { addIcon } from "../../utils/utils";
 import CreateIcon from "@mui/icons-material/Create";
 import LocationPinIcon from "@mui/icons-material/LocationPin";
 import GroupsIcon from "@mui/icons-material/Groups";

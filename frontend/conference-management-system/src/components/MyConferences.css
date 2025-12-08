@@ -54,17 +54,17 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
-/* Wrapper for content that will be blurred */
 .my-conferences-content {
     transition: filter 0.3s ease;
+    overflow-y: hidden;
 }
 
 .my-conferences-content.blurred {
     filter: blur(8px);
     pointer-events: none;
+    overflow-y: hidden;
 }
 
-/* Modal Overlay */
 .conference-modal-overlay {
     position: fixed;
     top: 0;
@@ -80,7 +80,6 @@
     overflow-y: auto;
 }
 
-/* Modal Content */
 .conference-modal-content {
     position: relative;
     background: white;
@@ -95,7 +94,6 @@
     z-index: 1001;
 }
 
-/* Close Button */
 .conference-modal-close {
     position: absolute;
     top: 10px;
@@ -103,25 +101,24 @@
     width: 40px;
     height: 40px;
     border: none;
-    background: rgba(0, 0, 0, 0.1);
+    background: hsl(26, 100%, 63%);
     border-radius: 50%;
     font-size: 28px;
     line-height: 1;
     cursor: pointer;
     z-index: 10;
     transition: all 0.2s;
-    color: #333;
+    color: hsl(210, 67%, 25%);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .conference-modal-close:hover {
-    background: rgba(0, 0, 0, 0.2);
     transform: rotate(90deg);
+    opacity: 0.8;
 }
 
-/* Animation */
 @keyframes modalSlideIn {
     from {
         opacity: 0;
