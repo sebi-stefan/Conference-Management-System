@@ -10,10 +10,10 @@ import Home from "./Home";
 function App() {
   return (
     <Routes>
-      <Route path={"/"} element={<Home />} />
-      <Route path={"/login"} element={<Login />} />
-      <Route path={"/register"} element={<Register />} />
-      <Route path={"/create"} element={<Conference />} />
+      <Route path={"/"} element={<Login />} />
+      <Route path={"/home"} element={<Home />} />
+      {/*<Route path={"/register"} element={<Register />} />*/}
+      {/*<Route path={"/create"} element={<Conference />} />*/}
     </Routes>
   );
 }

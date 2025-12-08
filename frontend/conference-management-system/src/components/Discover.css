@@ -21,7 +21,6 @@
     margin: 0;
 }
 
-/* Search */
 .discover__search {
     position: relative;
     margin-bottom: 1.5rem;
@@ -57,7 +56,6 @@
     box-shadow: 0 0 0 2px hsl(22 100% 62%);
 }
 
-/* Filters */
 .discover__filters {
     margin-bottom: 2rem;
 }
@@ -106,7 +104,6 @@
     background-color: hsla(0 84% 60% / 0.2);
 }
 
-/* Results */
 .discover__results-count {
     font-size: 0.875rem;
     color: hsl(210 20% 45%);
@@ -131,7 +128,6 @@
     }
 }
 
-/* Empty State */
 .discover__empty {
     text-align: center;
     padding: 4rem 0;
@@ -147,40 +143,4 @@
     font-size: 0.875rem;
     color: hsl(210 20% 45%);
     margin: 0;
-}
-
-/* Dark mode */
-:root.dark .discover__title {
-    color: hsl(210 40% 98%);
-}
-
-:root.dark .discover__subtitle,
-:root.dark .discover__filters-label,
-:root.dark .discover__results-count,
-:root.dark .discover__empty-title,
-:root.dark .discover__empty-text {
-    color: hsl(210 20% 65%);
-}
-
-:root.dark .discover__search-input {
-    background-color: hsl(210 55% 12%);
-    border-color: hsl(210 50% 20%);
-    color: hsl(210 40% 98%);
-}
-
-:root.dark .discover__search-input::placeholder {
-    color: hsl(210 20% 65%);
-}
-
-:root.dark .discover__search-icon {
-    color: hsl(210 20% 65%);
-}
-
-:root.dark .discover__tag {
-    background-color: hsl(210 50% 18%);
-    color: hsl(210 20% 65%);
-}
-
-:root.dark .discover__tag:hover {
-    background-color: hsl(210 50% 22%);
 }

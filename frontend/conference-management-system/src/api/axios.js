@@ -7,6 +7,7 @@ const api = axios.create({
   },
 });
 
+// add auth header to request before any call
 api.interceptors.request.use(
   (config) => {
     const email = localStorage.getItem("email");
@@ -20,7 +21,25 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
     return Promise.reject(error);
+  },
+);
+
+// handle unauthorized responses
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+      console.log(error);
+
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
+      }
+    }
   },
 );
 

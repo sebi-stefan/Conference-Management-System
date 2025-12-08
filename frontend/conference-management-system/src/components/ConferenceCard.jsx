@@ -1,5 +1,6 @@
 import { Calendar, MapPin, Users, Globe, Clock } from "lucide-react";
 import "./ConferenceCard.css";
+import { formatDate } from "../utils/utils";
 
 const ConferenceCard = ({
   conference,
@@ -12,16 +13,6 @@ const ConferenceCard = ({
     .split(",")
     .map((tag) => tag.trim())
     .filter(Boolean);
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    const date = new Date(dateStr);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
 
   const handleViewClick = () => {
     setSelectedConference(conference);
@@ -58,14 +49,14 @@ const ConferenceCard = ({
         <div className="conference-card__info-item">
           <MapPin className="conference-card__info-icon" />
           <span className="conference-card__info-text">
-            {conference.locationName}
+            {conference.venueName}
           </span>
         </div>
 
         <div className="conference-card__info-item">
           <Users className="conference-card__info-icon" />
           <span className="conference-card__info-text">
-            {conference.capacity} attendees
+            {conference.maxAttendees} maximum attendees
           </span>
         </div>
 

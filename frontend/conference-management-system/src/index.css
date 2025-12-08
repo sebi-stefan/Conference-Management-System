@@ -101,3 +101,9 @@ body {
     cursor: pointer;
     transition: all 0.3s;
 }
+
+.error-login {
+    font-size: 20px;
+    color: #dc2626;
+    text-align: center;
+}

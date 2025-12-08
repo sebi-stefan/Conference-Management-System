@@ -4,13 +4,15 @@ import "./NavBar.css";
 const NavBar = ({
   activeTab = "discover",
   onTabChange,
-  isConferenceModalOpen,
-  setIsConferenceModalOpen,
+  isConferenceCreateModalOpen,
+  isViewModalOpen,
 }) => {
   const tabs = ["Discover", "My Conferences"];
 
   return (
-    <nav className={`navbar ${isConferenceModalOpen ? "blurred" : ""}`}>
+    <nav
+      className={`navbar ${isConferenceCreateModalOpen || isViewModalOpen ? "blurred" : ""}`}
+    >
       <div className="navbar__brand">
         <Calendar className="navbar__icon" />
         <div className="navbar__brand-text">

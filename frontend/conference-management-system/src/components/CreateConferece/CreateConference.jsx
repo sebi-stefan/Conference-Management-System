@@ -11,7 +11,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import LinkIcon from "@mui/icons-material/Link";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-import { addIcon } from "../../utils/getIcons";
+import { addIcon } from "../../utils/utils";
 import "./Conference.css";
 
 import DatePicker from "react-datepicker";

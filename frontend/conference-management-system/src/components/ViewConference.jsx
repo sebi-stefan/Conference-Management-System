@@ -1,49 +1,121 @@
-const conference = {
-  title: "International Science & Research Forum",
-  startDate: "2025-05-10",
-  endDate: "2025-05-14",
-  locationName: "MIT Media Lab",
-  locationAddress: "75 Amherst St, Cambridge, MA",
-  capacity: "2000",
-  registrationDeadline: "2025-04-25",
-  website: "https://example.com/science-forum",
-  description:
-    "A premier gathering of scientists, researchers, and innovators presenting groundbreaking discoveries across physics, biology, chemistry, and environmental sciences.",
-  tags: "Science, Research, Innovation",
+import { formatDate } from "../utils/utils";
+import { Calendar, MapPin, Users, Globe, Clock } from "lucide-react";
+import "./ViewConference.css";
+import banner from "../media/banner.jpg";
+
+const getTags = (conference) => {
+  const tagSet = new Set();
+
+  conference.tags.split(",").forEach((tag) => {
+    tagSet.add(tag.trim().toLowerCase());
+  });
+
+  return Array.from(tagSet).map((tag) => {
+    return tag.charAt(0).toUpperCase() + tag.slice(1);
+  });
 };
 
-const sessions = [
-  {
-    title: "First session",
-    description: "This is the starting session for our conference",
-    room: "A34",
-    startDate: "2025-12-21",
-    endDate: "2025-12-22",
-    capacity: 250,
-  },
-  {
-    title: "2nd session",
-    description: "Text for 2nd",
-    room: "B54",
-    startDate: "2025-12-23",
-    endDate: "2025-12-24",
-    capacity: 240,
-  },
-  {
-    title: "3rd session",
-    description: "Text for 3rd",
-    room: "G45",
-    startDate: "2025-12-25",
-    endDate: "2025-12-26",
-    capacity: 300,
-  },
-];
+export const formatStatusAndTags = (status) => {
+  return status.slice(0, 1).toUpperCase() + status.slice(1).toLowerCase();
+};
 
-const ViewConference = ({ currentUserRole }) => {
+const ViewConference = ({ currentUserRole, selectedConference }) => {
   return (
-    <div className={"view-conference-container"}>
-      <h1>Your role is {currentUserRole}</h1>
-      <p>{conference.description}</p>
+    <div className="view-conference-container">
+      <div className="view-conference-banner-wrapper">
+        <img
+          src={selectedConference.coverImageUrl || banner}
+          alt={selectedConference.title}
+          className="view-conference-banner"
+        />
+      </div>
+
+      <div className="view-conference-header">
+        <div className="view-conference-title-row">
+          <h1 className="view-conference-title">{selectedConference.title}</h1>
+          <span className="view-conference-status-tag">
+            {formatStatusAndTags(selectedConference.status)}
+          </span>
+        </div>
+
+        <h2 className="view-conference-organizer">
+          Hosted by {selectedConference.organizer.firstName}{" "}
+          {selectedConference.organizer.lastName}
+        </h2>
+
+        <div className="view-conference-tags">
+          {getTags(selectedConference).map((tag, index) => (
+            <span key={index} className="view-conference-tag">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="view-conference-description">
+        <p>{selectedConference.description}</p>
+      </div>
+
+      <div className="view-conference-info-container">
+        <div className="view-container-info-item">
+          <Calendar className="view-conference-icon" />
+          <div className="view-conference-text-wrapper">
+            <span className="view-conference-label">Event Dates</span>
+            <span className="view-conference-text">
+              {formatDate(selectedConference.startDate)} -{" "}
+              {formatDate(selectedConference.endDate)}
+            </span>
+          </div>
+        </div>
+
+        <div className="view-container-info-item">
+          <MapPin className="view-conference-icon" />
+          <div className="view-conference-text-wrapper">
+            <span className="view-conference-label">Venue</span>
+            <span className="view-conference-text">
+              {selectedConference.venueName}
+            </span>
+            <span className="view-conference-subtext">
+              {selectedConference.venueAddress}
+            </span>
+          </div>
+        </div>
+
+        <div className="view-container-info-item">
+          <Users className="view-conference-icon" />
+          <div className="view-conference-text-wrapper">
+            <span className="view-conference-label">Capacity</span>
+            <span className="view-conference-text">
+              {selectedConference.maxAttendees} attendees
+            </span>
+          </div>
+        </div>
+
+        <div className="view-container-info-item">
+          <Clock className="view-conference-icon" />
+          <div className="view-conference-text-wrapper">
+            <span className="view-conference-label">Registration Deadline</span>
+            <span className="view-conference-text">
+              {formatDate(selectedConference.registrationDeadline)}
+            </span>
+          </div>
+        </div>
+
+        <div className="view-container-info-item">
+          <Globe className="view-conference-icon" />
+          <div className="view-conference-text-wrapper">
+            <span className="view-conference-label">Website</span>
+            <a
+              href={selectedConference.websiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="view-conference-link"
+            >
+              Visit Conference Website
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
