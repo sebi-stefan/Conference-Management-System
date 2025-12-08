@@ -15,7 +15,6 @@ import uvt.tw.conferencemanagementsystem.app.session.model.SessionEntity;
 import uvt.tw.conferencemanagementsystem.app.session.repository.SessionRepository;
 import uvt.tw.conferencemanagementsystem.app.session.util.SessionConverter;
 import uvt.tw.conferencemanagementsystem.app.session.util.SessionValidator;
-import uvt.tw.conferencemanagementsystem.app.user.service.UserService;
 
 @Service
 @RequiredArgsConstructor
