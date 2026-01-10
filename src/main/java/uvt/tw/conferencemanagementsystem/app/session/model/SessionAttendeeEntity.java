@@ -35,7 +35,7 @@ public class SessionAttendeeEntity {
       foreignKey = @ForeignKey(name = "fk_session_attendees_session"))
   private SessionEntity session;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(
       name = "user_id",
       nullable = false,

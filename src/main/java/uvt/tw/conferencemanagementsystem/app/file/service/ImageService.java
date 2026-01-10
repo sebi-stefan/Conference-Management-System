@@ -1,18 +1,19 @@
 package uvt.tw.conferencemanagementsystem.app.file.service;
 
-import io.minio.BucketExistsArgs;
-import io.minio.MakeBucketArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
+import io.minio.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
+import java.io.InputStream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import uvt.tw.conferencemanagementsystem.api.dto.user.UserResponseDto;
-import uvt.tw.conferencemanagementsystem.app.conference.service.ConferenceService;
-import uvt.tw.conferencemanagementsystem.app.user.service.UserService;
+import uvt.tw.conferencemanagementsystem.api.exception.UserNotFoundException;
+import uvt.tw.conferencemanagementsystem.app.conference.model.ConferenceEntity;
+import uvt.tw.conferencemanagementsystem.app.conference.repository.ConferenceRepository;
+import uvt.tw.conferencemanagementsystem.app.user.model.UserEntity;
+import uvt.tw.conferencemanagementsystem.app.user.repository.UserRepository;
 
 @Service
 @Slf4j
@@ -20,8 +21,8 @@ import uvt.tw.conferencemanagementsystem.app.user.service.UserService;
 public class ImageService {
 
   private final MinioClient minioClient;
-  private final UserService userService;
-  private final ConferenceService conferenceService;
+  private final UserRepository userRepository;
+  private final ConferenceRepository conferenceRepository;
 
   @Value("${minio.bucket-name}")
   private String bucketName;
@@ -47,10 +48,29 @@ public class ImageService {
     }
   }
 
-  public String uploadProfilePicture(MultipartFile file, Long userId) {
-    validateImage(file);
+  public InputStream getImage(String imageName) throws Exception {
+    return minioClient.getObject(
+        GetObjectArgs.builder().bucket(bucketName).object(imageName).build());
+  }
 
-    UserResponseDto user = userService.getUserById(userId);
+  @Transactional
+  public String uploadProfilePicture(MultipartFile file, Long userId) {
+
+    UserEntity user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(
+                () ->
+                    new UserNotFoundException(String.format("User with id: %d not found", userId)));
+
+    if (user.getProfilePictureUrl() != null) {
+      try {
+        deleteFile(user.getProfilePictureUrl());
+      } catch (Exception e) {
+        throw new RuntimeException(
+            String.format("Could not find file with name %s", user.getProfilePictureUrl()));
+      }
+    }
 
     try {
       String fileName = generateProfilePictureName(file.getOriginalFilename(), user.getEmail());
@@ -60,6 +80,7 @@ public class ImageService {
                   file.getInputStream(), file.getSize(), -1)
               .contentType(file.getContentType())
               .build());
+      user.setProfilePictureUrl(fileName);
 
       log.info("Image uploaded successfully: {}", fileName);
       return fileName;
@@ -70,6 +91,61 @@ public class ImageService {
     }
   }
 
+  @Transactional
+  public String uploadConferencePicture(MultipartFile file, Long conferenceId) {
+
+    ConferenceEntity conference =
+        conferenceRepository
+            .findById(conferenceId)
+            .orElseThrow(
+                () ->
+                    new UserNotFoundException(
+                        String.format("Conference with id: %d not found", conferenceId)));
+
+    if (conference.getCoverImageUrl() != null) {
+      try {
+        deleteFile(conference.getCoverImageUrl());
+      } catch (Exception e) {
+        throw new RuntimeException(
+            String.format("Could not find file with name %s", conference.getCoverImageUrl()));
+      }
+    }
+
+    try {
+      String fileName =
+          generateConferencePictureName(
+              file.getOriginalFilename(),
+              conference.getOrganizer().getEmail(),
+              conference.getTitle());
+
+      minioClient.putObject(
+          PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(
+                  file.getInputStream(), file.getSize(), -1)
+              .contentType(file.getContentType())
+              .build());
+      conference.setCoverImageUrl(fileName);
+
+      log.info("Image uploaded successfully: {}", fileName);
+      return fileName;
+    } catch (Exception e) {
+      log.error("Error uploading image", e);
+      throw new RuntimeException("Could not upload image", e);
+    }
+  }
+
+  public String determineContentType(String filename) {
+    if (filename.endsWith(".png")) return "image/png";
+    if (filename.endsWith(".jpg") || filename.endsWith(".jpeg")) return "image/jpeg";
+    if (filename.endsWith(".gif")) return "image/gif";
+    if (filename.endsWith(".webp")) return "image/webp";
+    return "application/octet-stream";
+  }
+
+  private void deleteFile(String fileName) throws Exception {
+    minioClient.removeObject(
+        RemoveObjectArgs.builder().bucket(bucketName).object(fileName).build());
+  }
+
   private String generateProfilePictureName(String originalFileName, String userEmail) {
     String extension = "";
     if (originalFileName != null && originalFileName.contains(".")) {
@@ -78,7 +154,16 @@ public class ImageService {
     return userEmail + "_profile_picture" + extension;
   }
 
-  private void validateImage(MultipartFile file) {
+  private String generateConferencePictureName(
+      String originalFileName, String userEmail, String conferenceName) {
+    String extension = "";
+    if (originalFileName != null && originalFileName.contains(".")) {
+      extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+    }
+    return userEmail + "_" + conferenceName + "_conference_picture" + extension;
+  }
+
+  public void validateImage(MultipartFile file) {
     if (file.isEmpty()) {
       throw new IllegalArgumentException("File is empty");
     }

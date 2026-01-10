@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceRequestDto;
 import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceResponseDto;
+import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceStatusUpdateDto;
 
 @RestController
 @RequestMapping("/conference")
@@ -36,4 +37,9 @@ public interface ConferenceApi {
 
   @DeleteMapping("/{conferenceId}")
   ResponseEntity<Void> deleteConferenceById(@PathVariable Long conferenceId);
+
+  @PostMapping("/update/{conferenceId}")
+  ResponseEntity<ConferenceResponseDto> updateConferenceStatus(
+      @RequestBody @Valid ConferenceStatusUpdateDto conferenceStatusUpdateDto,
+      @PathVariable Long conferenceId);
 }

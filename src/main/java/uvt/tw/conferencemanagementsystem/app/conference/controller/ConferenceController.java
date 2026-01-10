@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uvt.tw.conferencemanagementsystem.api.ConferenceApi;
 import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceRequestDto;
 import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceResponseDto;
+import uvt.tw.conferencemanagementsystem.api.dto.conference.ConferenceStatusUpdateDto;
 import uvt.tw.conferencemanagementsystem.app.conference.service.ConferenceService;
 
 @RestController
@@ -68,5 +69,16 @@ public class ConferenceController implements ConferenceApi {
     log.info("Received request for deleteConfereceById with id: {}", conferenceId);
     conferenceService.deleteConferenceById(conferenceId);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+  }
+
+  @Override
+  public ResponseEntity<ConferenceResponseDto> updateConferenceStatus(
+      ConferenceStatusUpdateDto conferenceStatusUpdateDto, Long conferenceId) {
+    log.info(
+        "Received request for updateConferenceStatus with {} for conference with id: {}",
+        conferenceStatusUpdateDto,
+        conferenceId);
+    return ResponseEntity.status(HttpStatus.OK)
+        .body(conferenceService.updateConferenceStatus(conferenceStatusUpdateDto, conferenceId));
   }
 }

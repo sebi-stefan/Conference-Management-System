@@ -138,4 +138,12 @@ public class GlobalExceptionHandler {
 
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
+
+  @ExceptionHandler(StatusNotValidException.class)
+  protected ResponseEntity<Object> handleStatusNotValidException(StatusNotValidException ex) {
+
+    ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, ex.getMessage(), List.of());
+
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
 }

@@ -2,7 +2,9 @@ package uvt.tw.conferencemanagementsystem.app.session.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,7 +58,7 @@ public class SessionEntity {
   private Integer maxParticipants;
 
   @OneToMany(mappedBy = "session", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private Set<SessionAttendeeEntity> sessionAttendees = new HashSet<>();
+  private List<SessionAttendeeEntity> sessionAttendees = new ArrayList<>();
 
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
@@ -68,4 +70,17 @@ public class SessionEntity {
       inverseJoinColumns =
           @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "speaker_user_id_fkey")))
   private Set<UserEntity> speakers = new HashSet<>();
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof SessionEntity)) return false;
+    SessionEntity that = (SessionEntity) o;
+    return id != null && id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

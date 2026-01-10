@@ -1,7 +1,9 @@
 package uvt.tw.conferencemanagementsystem.app.user.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,8 +58,21 @@ public class UserEntity {
   private Set<RegistrationEntity> registrations = new HashSet<>();
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private Set<SessionAttendeeEntity> sessionAttendees = new HashSet<>();
+  private List<SessionAttendeeEntity> sessionAttendees = new ArrayList<>();
 
   @ManyToMany(mappedBy = "speakers", fetch = FetchType.LAZY)
   private Set<SessionEntity> speakingSessions = new HashSet<>();
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof UserEntity)) return false;
+    UserEntity that = (UserEntity) o;
+    return id != null && id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }

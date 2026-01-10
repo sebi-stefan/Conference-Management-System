@@ -73,7 +73,7 @@ public class ConferenceEntity {
   @Column(name = "cover_image_url")
   private String coverImageUrl;
 
-  @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<SessionEntity> sessions = new HashSet<>();
 
   @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -81,4 +81,17 @@ public class ConferenceEntity {
 
   @OneToMany(mappedBy = "conference", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Set<ConferenceTagEntity> conferenceTags = new HashSet<>();
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ConferenceEntity)) return false;
+    ConferenceEntity that = (ConferenceEntity) o;
+    return id != null && id.equals(that.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return getClass().hashCode();
+  }
 }
