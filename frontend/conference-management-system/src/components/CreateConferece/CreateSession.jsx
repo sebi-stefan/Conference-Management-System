@@ -9,121 +9,98 @@ import { useEffect, useState } from "react";
 
 function CreateSession({
   isSessionOpen,
-  setIsSessionOpen,
-  sessions,
-  setSessions,
   data,
   editingIndex,
-  setEditingIndex,
+  onSave,
+  onCancel,
+  fetchConferences,
 }) {
   const [sessionData, setSessionData] = useState({
     title: "",
-    startDate: "",
-    endDate: "",
-    capacity: "",
+    startTime: "",
+    sessionType: "KEYNOTE",
+    endTime: "",
+    maxParticipants: "",
     room: "",
     description: "",
   });
 
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
-  const [edited, setEdited] = useState(false);
 
   useEffect(() => {
-    if (data && isSessionOpen) setSessionData(data);
-  }, [data]);
-
-  function emptySessionsForm() {
-    setSessionData({
-      title: "",
-      startDate: "",
-      endDate: "",
-      capacity: "",
-      room: "",
-      description: "",
-    });
-    setIsSessionOpen(false);
-    setError("");
-    setEditingIndex(null);
-    setEdited(false);
-  }
+    if (data && isSessionOpen) {
+      setSessionData({
+        title: data.title || "",
+        startTime: data.startTime || "",
+        endTime: data.endTime || "",
+        maxParticipants: data.maxParticipants || "",
+        room: data.room || "",
+        description: data.description || "",
+      });
+    }
+  }, [data, isSessionOpen]);
 
   function validateSessionForm() {
     if (Object.values(sessionData).includes("")) {
       setError("Please complete all the fields!");
-      return 0;
+      return false;
     }
 
-    const startDate = new Date(sessionData.startDate);
-    const endDate = new Date(sessionData.endDate);
+    const startDate = new Date(sessionData.startTime);
+    const endDate = new Date(sessionData.endTime);
 
     if (startDate > endDate) {
       setError("The start date should be before the end date!");
-      return 0;
+      return false;
     }
-    return 1;
+    return true;
   }
 
   function handleChange(e) {
     e.preventDefault();
     const { name, value } = e.target;
-    setSessionData((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
-
-    if (editingIndex !== null) setEdited(true);
+    setSessionData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   }
 
   function handleSaveSession() {
-    if (validateSessionForm() === 0) {
+    if (!validateSessionForm()) {
       setShake(true);
       setTimeout(() => setShake(false), 500);
+      setTimeout(() => setError(""), 3000);
       return;
     }
 
-    if (editingIndex !== null) {
-      setSessions((prevSessions) => {
-        const newSessions = [...prevSessions];
-        newSessions[editingIndex] = sessionData;
-        return newSessions;
-      });
-    } else {
-      setSessions([...sessions, sessionData]);
+    if (onSave) {
+      onSave(sessionData);
     }
-    emptySessionsForm();
+    fetchConferences();
   }
 
-  function handleDeleteSession(index) {
-    if (window.confirm("Are you sure you want to delete this session?")) {
-      setSessions((prevSessions) => prevSessions.filter((_, i) => i !== index));
-      emptySessionsForm();
+  function handleCancel() {
+    if (onCancel) {
+      onCancel();
     }
   }
 
   if (!isSessionOpen) return null;
 
   return (
-    <div className={"create-session-box"}>
-      {error !== "" && (
-        <p className={`session-error ${shake ? "shake" : ""}`}>{error}</p>
-      )}
-      <h1>
-        {editingIndex === null
-          ? "New Session"
-          : `Edit Session #${editingIndex + 1}`}
-      </h1>
+    <div className="create-session-box">
+      <p className={`session-error ${shake ? "shake" : ""}`}>{error}</p>
+      <h1>{editingIndex === null ? "New Session" : `Edit Session`}</h1>
       <form
-        className={"create-session-form"}
+        className="create-session-form"
         noValidate={false}
-        autoComplete={"off"}
+        autoComplete="off"
       >
-        <div className={"pair"}>
+        <div className="pair">
           <TextField
             label="Title"
-            name={"title"}
+            name="title"
             value={sessionData.title}
             onChange={handleChange}
             {...addIcon(CreateIcon)}
@@ -131,15 +108,14 @@ function CreateSession({
           />
         </div>
 
-        <div className={"pair"}>
+        <div className="pair">
           <TextField
             fullWidth={true}
-            name={"startDate"}
-            value={sessionData.startDate}
+            name="startTime"
+            value={sessionData.startTime}
             onChange={handleChange}
-            type={"date"}
-            label={"Start Date"}
-            defaultValue={""}
+            type="datetime-local"
+            label="Start Date"
             slotProps={{
               inputLabel: {
                 shrink: true,
@@ -149,11 +125,11 @@ function CreateSession({
 
           <TextField
             label="End Date"
-            name={"endDate"}
-            value={sessionData.endDate}
+            name="endTime"
+            value={sessionData.endTime}
             onChange={handleChange}
             fullWidth={true}
-            type={"date"}
+            type="datetime-local"
             slotProps={{
               inputLabel: {
                 shrink: true,
@@ -163,18 +139,18 @@ function CreateSession({
         </div>
 
         <TextField
-          label={"Capacity"}
-          name={"capacity"}
-          value={sessionData.capacity}
+          label="Capacity"
+          name="maxParticipants"
+          value={sessionData.maxParticipants}
           onChange={handleChange}
           fullWidth={true}
-          type={"number"}
+          type="number"
           {...addIcon(GroupsIcon)}
         />
 
         <TextField
           label="Room"
-          name={"room"}
+          name="room"
           value={sessionData.room}
           onChange={handleChange}
           {...addIcon(LocationPinIcon)}
@@ -182,34 +158,18 @@ function CreateSession({
 
         <TextField
           label="Description"
-          name={"description"}
+          name="description"
           value={sessionData.description}
           onChange={handleChange}
           multiline
           {...addIcon(DescriptionIcon)}
         />
       </form>
-      <div className={"btns-session"}>
-        {editingIndex !== null && edited && (
-          <button className={"btn"} onClick={handleSaveSession}>
-            Update
-          </button>
-        )}
-
-        {editingIndex === null && (
-          <button className={"btn"} onClick={handleSaveSession}>
-            Save
-          </button>
-        )}
-        {editingIndex !== null && (
-          <button
-            className={"btn"}
-            onClick={() => handleDeleteSession(editingIndex)}
-          >
-            Delete
-          </button>
-        )}
-        <button className={"btn"} onClick={emptySessionsForm}>
+      <div className="btns-session">
+        <button className="btn-save-new-conference" onClick={handleSaveSession}>
+          {editingIndex === null ? "Save" : "Update"}
+        </button>
+        <button className="btn-save-new-conference" onClick={handleCancel}>
           Cancel
         </button>
       </div>

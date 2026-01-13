@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "../../index.css";
+import { register } from "../../api/authService";
 
 function Register() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ function Register() {
     lastName: "",
     bio: "",
     organization: "",
+    role: "ORGANIZER",
   });
 
   const [errors, setErrors] = useState({});
@@ -74,13 +76,15 @@ function Register() {
     return Object.keys(newErrors).length === 0;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!validateForm()) return;
 
     try {
-      // send data
+      const response = await register(userData);
+      console.log("Registered");
+      window.location.href = "/login";
     } catch (err) {
       console.error("Error: ", err);
       setErrors({ submit: "Connection error. Try again..." });

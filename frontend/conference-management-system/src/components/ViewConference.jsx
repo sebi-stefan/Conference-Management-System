@@ -2,24 +2,89 @@ import { formatDate } from "../utils/utils";
 import { Calendar, MapPin, Users, Globe, Clock } from "lucide-react";
 import "./ViewConference.css";
 import banner from "../media/banner.jpg";
+import SessionCard from "./SessionCard";
+import { useEffect, useMemo, useState } from "react";
+import conference from "./CreateConferece/Conference";
 
-const getTags = (conference) => {
-  const tagSet = new Set();
+const ViewConference = ({
+  currentUserRole,
+  selectedConference,
+  onEditConference,
+  onDeleteConference,
+  onAddSession,
+  onEditSession,
+  onDeleteSession,
+  fetchConferences,
+  conferences,
+  setEditConference,
+}) => {
+  const [sampleSessions] = useState([
+    {
+      id: 1,
+      title: "Opening Keynote: Future of Technology",
+      description:
+        "Join us for an inspiring keynote address exploring the latest trends and innovations shaping our technological future.",
+      startTime: "2025-03-13",
+      endTime: "2025-03-13",
+      room: "Main Auditorium",
+      maxAttendees: 500,
+    },
+    {
+      id: 2,
+      title: "Workshop: AI and Machine Learning Fundamentals",
+      description:
+        "Hands-on workshop covering the basics of AI and machine learning with practical examples and exercises.",
+      startTime: "2025-03-14",
+      endTime: "2025-03-14",
+      room: "Conference Room A",
+      maxAttendees: 50,
+    },
+    {
+      id: 3,
+      title: "Panel Discussion: Ethics in Technology",
+      description:
+        "Expert panel discussing the ethical implications of emerging technologies and their impact on society.",
+      startTime: "2025-03-14",
+      endTime: "2025-03-14",
+      room: "Conference Room B",
+      maxAttendees: 100,
+    },
+  ]);
 
-  conference.tags.split(",").forEach((tag) => {
-    tagSet.add(tag.trim().toLowerCase());
-  });
+  console.log(selectedConference);
 
-  return Array.from(tagSet).map((tag) => {
-    return tag.charAt(0).toUpperCase() + tag.slice(1);
-  });
-};
+  const sessions = selectedConference?.sessions || [];
 
-export const formatStatusAndTags = (status) => {
-  return status.slice(0, 1).toUpperCase() + status.slice(1).toLowerCase();
-};
+  const handleEditSession = (session) => {
+    if (onEditSession) {
+      onEditSession(session);
+    }
+  };
 
-const ViewConference = ({ currentUserRole, selectedConference }) => {
+  const handleDeleteSession = (session) => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the session "${session.title}"?`,
+      )
+    ) {
+      if (onDeleteSession) {
+        onDeleteSession(session);
+      }
+    }
+  };
+
+  const handleDeleteConference = () => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete the conference "${selectedConference.title}"? This action cannot be undone.`,
+      )
+    ) {
+      if (onDeleteConference) {
+        onDeleteConference(selectedConference);
+      }
+    }
+  };
+
   return (
     <div className="view-conference-container">
       <div className="view-conference-banner-wrapper">
@@ -34,7 +99,7 @@ const ViewConference = ({ currentUserRole, selectedConference }) => {
         <div className="view-conference-title-row">
           <h1 className="view-conference-title">{selectedConference.title}</h1>
           <span className="view-conference-status-tag">
-            {formatStatusAndTags(selectedConference.status)}
+            {/* {formatStatusAndTags(selectedConference.status)} */}
           </span>
         </div>
 
@@ -44,11 +109,11 @@ const ViewConference = ({ currentUserRole, selectedConference }) => {
         </h2>
 
         <div className="view-conference-tags">
-          {getTags(selectedConference).map((tag, index) => (
+          {/* {getTags(selectedConference).map((tag, index) => (
             <span key={index} className="view-conference-tag">
               {tag}
             </span>
-          ))}
+          ))} */}
         </div>
       </div>
 
@@ -116,6 +181,65 @@ const ViewConference = ({ currentUserRole, selectedConference }) => {
           </div>
         </div>
       </div>
+
+      {/* Sessions Section */}
+      <div className="view-conference-sessions">
+        <div className="view-conference-sessions-header">
+          <h2 className="view-conference-sessions-title">Sessions</h2>
+          {currentUserRole === "organizer" && onAddSession && (
+            <button
+              className="view-conference-add-session-btn"
+              onClick={onAddSession}
+            >
+              Add Session
+            </button>
+          )}
+        </div>
+
+        {sessions.length > 0 ? (
+          <div className="view-conference-sessions-grid">
+            {sessions.map((session, index) => (
+              <SessionCard
+                key={session.id || index}
+                session={session}
+                mode={currentUserRole === "organizer" ? "edit" : "display"}
+                onEdit={handleEditSession}
+                onDelete={handleDeleteSession}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="view-conference-sessions-empty">
+            <p className="view-conference-sessions-empty-title">
+              {currentUserRole === "organizer"
+                ? "No sessions added yet"
+                : "Sessions coming soon"}
+            </p>
+            <p className="view-conference-sessions-empty-text">
+              {currentUserRole === "organizer"
+                ? "Click 'Add Session' to create your first session"
+                : "Check back later for session details"}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {currentUserRole === "organizer" && (
+        <div className="view-conference-actions">
+          <button
+            className="view-conference-action-btn view-conference-action-btn--edit"
+            onClick={onEditConference}
+          >
+            Edit Conference
+          </button>
+          <button
+            className="view-conference-action-btn view-conference-action-btn--delete"
+            onClick={handleDeleteConference}
+          >
+            Delete Conference
+          </button>
+        </div>
+      )}
     </div>
   );
 };
