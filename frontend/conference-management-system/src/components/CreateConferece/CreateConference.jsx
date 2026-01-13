@@ -16,7 +16,10 @@ import "./Conference.css";
 
 import DatePicker from "react-datepicker";
 import CreateSession from "./CreateSession";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { saveConference } from "../../api/conferenceService";
+import conference from "./Conference";
+import { editConference } from "../../api/conferenceService";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -36,26 +39,64 @@ function CreateConference({
   sessions,
   setOpenSessionData,
   setEditingIndex,
+  closeConferenceModal,
+  setConferences,
+  fetchConferences,
+  isConferenceCreateModalOpen,
+  setIsEditModalOpen,
+  setIsViewModalOpen,
+  setIsConferenceModalOpen,
+  conferenceData,
+  selectedConference,
 }) {
-  const [conferenceData, setConferenceData] = useState({
+  console.log("CreateConference rendered, conferenceData:", conferenceData);
+
+  const [conferenceDataLocal, setConferenceDataLocal] = useState({
     title: "",
     startDate: "",
     endDate: "",
-    locationName: "",
-    locationAddress: "",
-    capacity: "",
+    venueName: "",
+    venueAddress: "",
+    maxAttendees: "",
     registrationDeadline: "",
-    website: "",
+    websiteUrl: "",
     description: "",
   });
+
+  // setConferenceDataLocal(conferenceData);
+  // console.log(conferenceData);
+
+  // console.log("CONFERENCE DATAAAAAA", conferenceData);
+
+  useEffect(() => {
+    if (conferenceData) {
+      setConferenceDataLocal({
+        title: conferenceData.title || "",
+        startDate: conferenceData.startDate || "",
+        endDate: conferenceData.endDate || "",
+        venueName: conferenceData.venueName || "",
+        venueAddress: conferenceData.venueAddress || "",
+        maxAttendees: conferenceData.maxAttendees || "",
+        registrationDeadline: conferenceData.registrationDeadline || "",
+        websiteUrl: conferenceData.websiteUrl || "",
+        description: conferenceData.description || "",
+      });
+    }
+  }, [conferenceData]);
 
   const [error, setError] = useState("");
   const [shake, setShake] = useState(false);
 
+  function handleCancel() {
+    setIsEditModalOpen(false);
+    setIsViewModalOpen(true);
+    setIsConferenceModalOpen(false);
+  }
+
   function handleChange(e) {
     e.preventDefault();
     const { name, value } = e.target;
-    setConferenceData((prevState) => {
+    setConferenceDataLocal((prevState) => {
       return {
         ...prevState,
         [name]: value,
@@ -64,14 +105,16 @@ function CreateConference({
   }
 
   function validateConferenceForm() {
-    if (Object.values(conferenceData).includes("")) {
+    if (Object.values(conferenceDataLocal).includes("")) {
       setError("Please complete all the fields!");
       return 0;
     }
 
-    const startDate = new Date(conferenceData.startDate);
-    const endDate = new Date(conferenceData.endDate);
-    const registrationDeadline = new Date(conferenceData.registrationDeadline);
+    const startDate = new Date(conferenceDataLocal.startDate);
+    const endDate = new Date(conferenceDataLocal.endDate);
+    const registrationDeadline = new Date(
+      conferenceDataLocal.registrationDeadline,
+    );
 
     if (startDate > endDate) {
       setError("The start date should be before the end date!");
@@ -85,7 +128,7 @@ function CreateConference({
     return 1;
   }
 
-  function handleSaveConference() {
+  async function handleSaveConference() {
     if (validateConferenceForm() === 0) {
       setShake(true);
       setTimeout(() => setShake(false), 500);
@@ -93,21 +136,36 @@ function CreateConference({
       return;
     }
 
-    console.log("Saved");
-  }
+    try {
+      if (conferenceData && conferenceData.id) {
+        // EDITING existing conference
+        const updatedData = await editConference(
+          conferenceData.id,
+          conferenceDataLocal,
+        );
+        console.log("Conference updated successfully");
 
-  function editSession(session, index) {
-    if (isSessionOpen === false) {
-      setOpenSessionData({
-        title: session.title,
-        startDate: session.startDate,
-        endDate: session.endDate,
-        capacity: session.capacity,
-        room: session.room,
-        description: session.description,
-      });
-      setIsSessionOpen(true);
-      setEditingIndex(index);
+        // Fetch fresh data first
+        await fetchConferences();
+
+        // Then close modals
+        setIsConferenceModalOpen(false);
+        setIsEditModalOpen(false);
+        setIsViewModalOpen(false);
+      } else {
+        // CREATING new conference
+        const data = await saveConference(conferenceDataLocal);
+        console.log("Conference created successfully with ID:", data.id);
+
+        await fetchConferences();
+        closeConferenceModal();
+      }
+    } catch (error) {
+      console.error("Failed to save conference:", error);
+      setError("Failed to save conference. Please try again.");
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+      setTimeout(() => setError(""), 3000);
     }
   }
 
@@ -117,7 +175,11 @@ function CreateConference({
       {/*  <p className={`session-error ${shake ? "shake" : ""}`}>{error}</p>*/}
       {/*)}*/}
       <p className={`session-error ${shake ? "shake" : ""}`}>{error}</p>
-      <h1>Create your conference!</h1>
+      <h1>
+        {isConferenceCreateModalOpen
+          ? "Edit your conference!"
+          : "Create your conference!"}
+      </h1>
       <form
         className={"create-conference-form"}
         noValidate={false}
@@ -127,7 +189,7 @@ function CreateConference({
           <TextField
             label="Title"
             name={"title"}
-            value={conferenceData.title}
+            value={conferenceDataLocal.title}
             {...addIcon(CreateIcon)}
             fullWidth={true}
             autoFocus={true}
@@ -156,9 +218,8 @@ function CreateConference({
             fullWidth={true}
             type={"date"}
             name={"startDate"}
-            value={conferenceData.startDate}
+            value={conferenceDataLocal.startDate}
             label={"Start Date"}
-            defaultValue={""}
             onChange={handleChange}
             slotProps={{
               inputLabel: {
@@ -170,7 +231,7 @@ function CreateConference({
           <TextField
             label="End Date"
             name={"endDate"}
-            value={conferenceData.endDate}
+            value={conferenceDataLocal.endDate}
             fullWidth={true}
             onChange={handleChange}
             type={"date"}
@@ -182,21 +243,41 @@ function CreateConference({
           />
         </div>
 
+        {/*<div className={"pair"}>*/}
+        {/*  <TextField*/}
+        {/*    label="Country"*/}
+        {/*    name={"country"}*/}
+        {/*    onChange={handleChange}*/}
+        {/*    value={conferenceDataLocal.country}*/}
+        {/*    fullWidth={true}*/}
+        {/*    {...addIcon(LocationPinIcon)}*/}
+        {/*  />*/}
+
+        {/*  <TextField*/}
+        {/*    label="City"*/}
+        {/*    name={"city"}*/}
+        {/*    onChange={handleChange}*/}
+        {/*    value={conferenceDataLocal.city}*/}
+        {/*    fullWidth={true}*/}
+        {/*    {...addIcon(LocationPinIcon)}*/}
+        {/*  />*/}
+        {/*</div>*/}
+
         <div className={"pair"}>
           <TextField
             label="Location Name"
-            name={"locationName"}
+            name={"venueName"}
             onChange={handleChange}
-            value={conferenceData.locationName}
+            value={conferenceDataLocal.venueName}
             fullWidth={true}
             {...addIcon(BusinessIcon)}
           />
 
           <TextField
             label="Location Address"
-            name={"locationAddress"}
+            name={"venueAddress"}
             onChange={handleChange}
-            value={conferenceData.locationAddress}
+            value={conferenceDataLocal.venueAddress}
             fullWidth={true}
             {...addIcon(LocationPinIcon)}
           />
@@ -204,10 +285,10 @@ function CreateConference({
 
         <div className={"pair"}>
           <TextField
-            label={"Capacity"}
-            name={"capacity"}
+            label={"Maximum Attendees"}
+            name={"maxAttendees"}
             onChange={handleChange}
-            value={conferenceData.capacity}
+            value={conferenceDataLocal.maxAttendees}
             fullWidth={true}
             type={"number"}
             {...addIcon(GroupsIcon)}
@@ -216,7 +297,7 @@ function CreateConference({
           <TextField
             label={"Registration Deadline"}
             name={"registrationDeadline"}
-            value={conferenceData.registrationDeadline}
+            value={conferenceDataLocal.registrationDeadline}
             fullWidth={true}
             onChange={handleChange}
             type={"date"}
@@ -233,15 +314,15 @@ function CreateConference({
           type={"url"}
           onChange={handleChange}
           {...addIcon(LinkIcon)}
-          name={"website"}
-          value={conferenceData.website}
+          name={"websiteUrl"}
+          value={conferenceDataLocal.websiteUrl}
         />
 
         <TextField
           label="Description"
           name={"description"}
           onChange={handleChange}
-          value={conferenceData.description}
+          value={conferenceDataLocal.description}
           multiline
           {...addIcon(DescriptionIcon)}
         />
@@ -257,20 +338,16 @@ function CreateConference({
       {/*      ))*/}
       {/*    : ""}*/}
       {/*</p>*/}
-
       <div className={"btns-session"}>
         <button className={"btn"} onClick={handleSaveConference}>
-          Save
+          {isConferenceCreateModalOpen ? "Save Changes" : "Save"}
         </button>
 
-        {/*<button*/}
-        {/*  className={"btn"}*/}
-        {/*  onClick={() =>*/}
-        {/*    !isSessionOpen ? setIsSessionOpen(!isSessionOpen) : null*/}
-        {/*  }*/}
-        {/*>*/}
-        {/*  Add New Session*/}
-        {/*</button>*/}
+        {isConferenceCreateModalOpen && (
+          <button className={"btn-cancel"} onClick={handleCancel}>
+            Cancel
+          </button>
+        )}
       </div>
     </div>
   );

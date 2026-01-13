@@ -9,11 +9,6 @@ const ConferenceCard = ({
   setIsViewModalOpen,
   setSelectedConference,
 }) => {
-  const tags = conference.tags
-    .split(",")
-    .map((tag) => tag.trim())
-    .filter(Boolean);
-
   const handleViewClick = () => {
     setSelectedConference(conference);
     setIsViewModalOpen(true);
@@ -21,22 +16,10 @@ const ConferenceCard = ({
 
   return (
     <div className="conference-card">
-      {/* Tags */}
-      <div className="conference-card__tags">
-        {tags.map((tag, index) => (
-          <span key={index} className="conference-card__tag">
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Title */}
       <h3 className="conference-card__title">{conference.title}</h3>
 
-      {/* Description */}
       <p className="conference-card__description">{conference.description}</p>
 
-      {/* Info Grid */}
       <div className="conference-card__info">
         <div className="conference-card__info-item">
           <Calendar className="conference-card__info-icon" />
@@ -68,18 +51,8 @@ const ConferenceCard = ({
         </div>
       </div>
 
-      {/* Actions */}
       {mode === "display" ? (
         <div className="conference-card__actions">
-          {/*<a*/}
-          {/*  href={conference.website}*/}
-          {/*  target="_blank"*/}
-          {/*  rel="noopener noreferrer"*/}
-          {/*  className="conference-card__btn conference-card__btn--primary"*/}
-          {/*>*/}
-          {/*  <Globe className="conference-card__btn-icon" />*/}
-          {/*  Visit Website*/}
-          {/*</a>*/}
           <button
             className="conference-card__btn conference-card__btn--accent"
             onClick={handleViewClick}

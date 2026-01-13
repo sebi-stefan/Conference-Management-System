@@ -25,16 +25,3 @@
     color: hsl(210 20% 45%);
     margin: 0.5rem 0 0 0;
 }
-
-/* Dark mode */
-:root.dark .index-page {
-    background-color: hsl(210 55% 8%);
-}
-
-:root.dark .index-page__placeholder-title {
-    color: hsl(210 40% 98%);
-}
-
-:root.dark .index-page__placeholder-text {
-    color: hsl(210 20% 65%);
-}

@@ -1,38 +1,60 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
 import ConferenceCard from "./ConferenceCard";
 import "./Discover.css";
-import { myConferences as conferences } from "./Home";
-import ViewConference, { formatStatusAndTags } from "./ViewConference";
-
-// Extract unique tags from all conferences
-const getAllTags = (conferences) => {
-  const tagSet = new Set();
-  conferences.forEach((conf) => {
-    conf.tags.split(",").forEach((tag) => {
-      const trimmed = tag.trim();
-      if (trimmed) tagSet.add(trimmed);
-    });
-  });
-  return Array.from(tagSet).sort();
-};
+import ViewConference from "./ViewConference";
+import {
+  getAllConferences,
+  getAllConferencesByCurrentOrganizer,
+} from "../api/conferenceService";
+import { getSessionsByConferenceId } from "../api/sessionService";
 
 const Discover = ({
-  currentUserRole,
   setSelectedConference,
   selectedConference,
   setIsViewModalOpen,
   isViewModalOpen,
 }) => {
+  const [conferences, setConferences] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
+
+  const fetchConferences = async () => {
+    try {
+      const conferences = await getAllConferences();
+
+      const conferencesWithSessions = await Promise.all(
+        conferences.map(async (conf) => ({
+          ...conf,
+          sessions: (await getSessionsByConferenceId(conf.id)) || [],
+        })),
+      );
+
+      setConferences(conferencesWithSessions);
+
+      if (selectedConference) {
+        const updatedSelected = conferencesWithSessions.find(
+          (conf) => conf.id === selectedConference.id,
+        );
+        if (updatedSelected) {
+          setSelectedConference(updatedSelected);
+        }
+      }
+
+      console.log(conferences);
+    } catch (error) {
+      console.error("Failed to fetch conferences:", error);
+      setConferences([]);
+    }
+  };
+
+  useEffect(() => {
+    fetchConferences();
+  }, []);
 
   const closeConferenceModal = () => {
     setIsViewModalOpen(false);
     setSelectedConference(null);
   };
-
-  const allTags = useMemo(() => getAllTags(conferences), [conferences]);
 
   const filteredConferences = useMemo(() => {
     return conferences.filter((conf) => {
@@ -42,20 +64,9 @@ const Discover = ({
         conf.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
         conf.venueName.toLowerCase().includes(searchQuery.toLowerCase());
 
-      const confTags = conf.tags.split(",").map((t) => t.trim());
-      const matchesTags =
-        selectedTags.length === 0 ||
-        selectedTags.some((tag) => confTags.includes(tag));
-
-      return matchesSearch && matchesTags;
+      return matchesSearch;
     });
-  }, [conferences, searchQuery, selectedTags]);
-
-  const toggleTag = (tag) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
-    );
-  };
+  }, [conferences, searchQuery]);
 
   return (
     <section className="discover">
@@ -79,25 +90,6 @@ const Discover = ({
 
       <div className="discover__filters">
         <p className="discover__filters-label">Filter by topics:</p>
-        <div className="discover__tags">
-          {allTags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => toggleTag(tag)}
-              className={`discover__tag ${selectedTags.includes(tag) ? "discover__tag--active" : ""}`}
-            >
-              {formatStatusAndTags(tag)}
-            </button>
-          ))}
-          {selectedTags.length > 0 && (
-            <button
-              onClick={() => setSelectedTags([])}
-              className="discover__tag discover__tag--clear"
-            >
-              Clear all
-            </button>
-          )}
-        </div>
       </div>
 
       <p className="discover__results-count">
@@ -124,8 +116,11 @@ const Discover = ({
         </div>
       )}
 
-      {isViewModalOpen && (
-        <div className="conference-modal-overlay">
+      {isViewModalOpen && selectedConference && (
+        <div
+          className="conference-modal-overlay"
+          onClick={closeConferenceModal}
+        >
           <div
             className="conference-modal-content"
             onClick={(e) => e.stopPropagation()}
@@ -137,7 +132,7 @@ const Discover = ({
               ×
             </button>
             <ViewConference
-              currentUserRole={currentUserRole}
+              currentUserRole="attendee"
               selectedConference={selectedConference}
             />
           </div>
